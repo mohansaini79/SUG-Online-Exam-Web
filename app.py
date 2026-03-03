@@ -18,12 +18,18 @@ from flask import send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
+# ── gevent monkey-patch ───────────────────────────────────
+# ★ Gunicorn khud patch karta hai — hum NAHI karenge ★
+import os
+_is_gunicorn = "gunicorn" in os.environ.get("SERVER_SOFTWARE", "")
 
-# ── gevent monkey-patch FIRST ─────────────────────────────────────────────
-# ── gevent monkey-patch FIRST ─────────────────────────────
-from gevent import monkey
-monkey.patch_all(thread=False)
-print("[OK] gevent monkey-patch applied")
+if not _is_gunicorn:
+    # Sirf direct python app.py pe patch karo
+    from gevent import monkey
+    monkey.patch_all(thread=False)
+    print("[OK] gevent monkey-patch applied (direct run)")
+else:
+    print("[OK] gevent patch skipped (gunicorn handles it)")
 
 ASYNC_MODE = 'gevent'
 print(f"[OK] SocketIO mode = {ASYNC_MODE}")
