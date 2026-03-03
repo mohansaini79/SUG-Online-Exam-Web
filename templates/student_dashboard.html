@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Student Dashboard – ExamPro</title>
+<title>Student Dashboard – SugExam</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- results.html — </head> se pehle add karo -->
 <script src="/static/js/toast.js"></script>
@@ -55,7 +55,7 @@
               border-radius:14px !important; padding:12px 18px !important; }
 </style>
 </head>
-<body class="h-screen overflow-hidden text-gray-100 flex flex-col">
+<body class="min-h-screen text-gray-100">
   <!-- ══ UNIVERSITY TOP BANNER ══ -->
 <div class="w-full border-b border-red-900/40 flex-shrink-0"
   style="background:linear-gradient(135deg,rgba(4,30,66,0.98),rgba(60,10,10,0.95));
@@ -95,7 +95,7 @@
   <div class="h-0.5 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50"></div>
 </div>
 
-<div class="flex overflow-hidden" style="height:calc(100vh - 57px)">
+<div class="flex h-screen overflow-hidden">
 
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar w-64 flex-shrink-0 flex-col hidden md:flex">
@@ -106,7 +106,7 @@
           <i class="fas fa-graduation-cap text-white text-sm"></i>
         </div>
         <div>
-          <p class="font-bold text-white text-sm">ExamPro</p>
+          <p class="font-bold text-white text-sm">SugExam</p>
           <p class="text-xs text-gray-500">Student Portal</p>
         </div>
       </div>
