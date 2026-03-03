@@ -20,9 +20,10 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 load_dotenv()
 
 # ── gevent monkey-patch FIRST ─────────────────────────────────────────────
+# ── gevent monkey-patch FIRST ─────────────────────────────
 from gevent import monkey
-monkey.patch_all(thread=False, os=False)
-print("[OK] gevent monkey-patch applied (thread=False)")
+monkey.patch_all(thread=False)
+print("[OK] gevent monkey-patch applied")
 
 ASYNC_MODE = 'gevent'
 print(f"[OK] SocketIO mode = {ASYNC_MODE}")
