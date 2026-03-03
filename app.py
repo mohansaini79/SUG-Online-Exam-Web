@@ -16,23 +16,17 @@ from functools import wraps
 from dotenv import load_dotenv
 from flask import send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
+import eventlet
+eventlet.monkey_patch()
+print("[OK] eventlet monkey-patch applied")
+
+ASYNC_MODE = 'eventlet'
+print(f"[OK] SocketIO mode = {ASYNC_MODE}")
 
 load_dotenv()
 # ── gevent monkey-patch ───────────────────────────────────
 # ★ Gunicorn khud patch karta hai — hum NAHI karenge ★
-import os
-_is_gunicorn = "gunicorn" in os.environ.get("SERVER_SOFTWARE", "")
-
-if not _is_gunicorn:
-    # Sirf direct python app.py pe patch karo
-    from gevent import monkey
-    monkey.patch_all(thread=False)
-    print("[OK] gevent monkey-patch applied (direct run)")
-else:
-    print("[OK] gevent patch skipped (gunicorn handles it)")
-
-ASYNC_MODE = 'gevent'
-print(f"[OK] SocketIO mode = {ASYNC_MODE}")
+# ── eventlet monkey-patch FIRST ──────────────────────────
 
 from flask import (
     Flask, render_template, request, session,
@@ -129,7 +123,7 @@ bcrypt   = Bcrypt(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins='*',
-    async_mode='gevent',
+    async_mode='eventlet',
     ping_timeout=60,
     ping_interval=25,
     logger=False,
