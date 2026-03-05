@@ -322,7 +322,10 @@ def ranking_page(exam_id):
 @role_required('faculty')
 def analytics_page(exam_id):
     return render_template('analytics.html', exam_id=exam_id)
-
+#sitemap
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml')
 # ═══════════════════════════════════════════════════════════════════════════
 # AUTH API
 # ═══════════════════════════════════════════════════════════════════════════
