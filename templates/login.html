@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ExamPro – Shobhit University Gangoh</title>
+<title>SUG-Exam – Shobhit University Gangoh</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
@@ -322,7 +322,7 @@
       <span class="inline-flex items-center gap-1.5 px-3 py-1.5
         rounded-full text-xs font-bold
         bg-green-500/15 border border-green-500/35 text-green-400">
-        <i class="fas fa-graduation-cap"></i> ExamPro
+        <i class="fas fa-graduation-cap"></i> -SUG-Exam
       </span>
     </div>
   </div>
@@ -551,7 +551,7 @@
                   class="relative z-10 flex items-center
                     justify-center gap-2">
                   <i class="fas fa-sign-in-alt"></i>
-                  Sign In to ExamPro
+                  Sign In to SUG-Exam
                 </span>
               </button>
             </form>
@@ -829,7 +829,7 @@ async function doLogin(e) {
             'error');
       btn.disabled  = false;
       btnText.innerHTML =
-        '<i class="fas fa-sign-in-alt mr-2"></i>Sign In to ExamPro';
+        '<i class="fas fa-sign-in-alt mr-2"></i>Sign In to SUG-Exam';
       document.getElementById('inp-pass').focus();
     }
 
@@ -837,7 +837,7 @@ async function doLogin(e) {
     toast('Server error. Please try again.', 'error');
     btn.disabled  = false;
     btnText.innerHTML =
-      '<i class="fas fa-sign-in-alt mr-2"></i>Sign In to ExamPro';
+      '<i class="fas fa-sign-in-alt mr-2"></i>Sign In to SUG-Exam';
   }
 }
 
