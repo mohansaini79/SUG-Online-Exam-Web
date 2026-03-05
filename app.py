@@ -17,6 +17,11 @@ from dotenv import load_dotenv
 from flask import send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
 import eventlet
+from flask import send_from_directory
+
+@app.route('/googleed7c73f46e9a8ddc.html')
+def google_verify():
+    return send_from_directory('.', 'googleed7c73f46e9a8ddc.html')
 eventlet.monkey_patch()
 print("[OK] eventlet monkey-patch applied")
 
