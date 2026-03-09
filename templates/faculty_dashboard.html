@@ -112,6 +112,11 @@
         <i class="fas fa-satellite-dish w-4 text-center text-red-400"></i> Live Feed
         <span id="live-dot" class="hidden ml-auto w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
       </button>
+      <!-- ★ NEW: Results Tab ★ -->
+      <button onclick="showTab('results')" id="nav-results"
+        class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-400">
+        <i class="fas fa-trophy w-4 text-center text-yellow-400"></i> Results
+      </button>
     </nav>
     <div class="px-4 pb-5">
       <button onclick="logout()"
@@ -270,8 +275,6 @@
       <!-- ══ TAB: MANAGE QUESTIONS ══ -->
       <div id="tab-questions" class="hidden">
         <div class="max-w-4xl space-y-5">
-
-          <!-- Step 1: Select Exam -->
           <div class="glass2 rounded-2xl p-5">
             <h3 class="font-bold text-white mb-3 flex items-center gap-2">
               <span class="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">1</span>
@@ -287,11 +290,7 @@
               </button>
             </div>
           </div>
-
-          <!-- Step 2: Questions -->
           <div id="q-step2" class="hidden space-y-4">
-
-            <!-- Exam info bar -->
             <div class="glass rounded-xl px-4 py-3 flex items-center gap-3">
               <div class="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center">
                 <i class="fas fa-file-alt text-indigo-400 text-xs"></i>
@@ -303,17 +302,12 @@
               <span id="q-count-badge"
                 class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-mono font-bold">0</span>
             </div>
-
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-              <!-- ★ AI Upload ★ -->
               <div class="glass2 rounded-2xl p-5">
                 <h4 class="font-bold text-white mb-1 flex items-center gap-2 text-sm">
                   <i class="fas fa-robot text-purple-400"></i> AI Upload PDF / DOCX
                 </h4>
                 <p class="text-gray-500 text-xs mb-2">AI extracts questions &amp; generates model answers</p>
-
-                <!-- AI badges -->
                 <div class="flex items-center gap-2 mb-4 flex-wrap">
                   <span style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);color:#c4b5fd;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">
                     ✦ LLaMA 3.3 70B
@@ -322,8 +316,6 @@
                     Auto Model Answers
                   </span>
                 </div>
-
-                <!-- Drop zone -->
                 <div id="drop-zone"
                   class="border-2 border-dashed border-purple-500/30 rounded-2xl p-8 text-center mb-4 cursor-pointer hover:border-purple-500/60 hover:bg-purple-500/5 transition-all"
                   onclick="document.getElementById('q-file').click()"
@@ -346,8 +338,6 @@
                 </button>
                 <div id="parse-result" class="hidden mt-3 p-4 rounded-xl text-xs"></div>
               </div>
-
-              <!-- Manual Add -->
               <div class="glass2 rounded-2xl p-5">
                 <h4 class="font-bold text-white mb-1 flex items-center gap-2 text-sm">
                   <i class="fas fa-plus-circle text-emerald-400"></i> Add Manually
@@ -384,8 +374,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Question List -->
             <div class="glass2 rounded-2xl p-5">
               <div class="flex items-center justify-between mb-4">
                 <h4 class="font-bold text-white flex items-center gap-2 text-sm">
@@ -442,6 +430,50 @@
         </div>
       </div>
 
+      <!-- ══ TAB: RESULTS ══ -->
+      <div id="tab-results" class="hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <i class="fas fa-trophy text-yellow-400"></i> Results Overview
+          </h3>
+          <select id="results-exam-select"
+            onchange="loadFacultyResults(this.value)"
+            class="input-pro px-3 py-2 rounded-xl text-sm min-w-[220px]">
+            <option value="">— Select Exam —</option>
+          </select>
+        </div>
+
+        <!-- Stats -->
+        <div id="results-stats"
+          class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5 hidden">
+          <div class="glass rounded-2xl p-4 text-center">
+            <p class="text-xs text-gray-500 uppercase mb-1">Total</p>
+            <p class="text-3xl font-black text-white" id="rs-total">0</p>
+          </div>
+          <div class="glass rounded-2xl p-4 text-center">
+            <p class="text-xs text-gray-500 uppercase mb-1">Passed</p>
+            <p class="text-3xl font-black text-emerald-400" id="rs-pass">0</p>
+          </div>
+          <div class="glass rounded-2xl p-4 text-center">
+            <p class="text-xs text-gray-500 uppercase mb-1">Failed</p>
+            <p class="text-3xl font-black text-red-400" id="rs-fail">0</p>
+          </div>
+          <div class="glass rounded-2xl p-4 text-center">
+            <p class="text-xs text-gray-500 uppercase mb-1">Pass Rate</p>
+            <p class="text-3xl font-black text-purple-400" id="rs-rate">0%</p>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="glass rounded-2xl overflow-hidden">
+          <div id="results-table-body"
+            class="p-10 text-center text-gray-500">
+            <i class="fas fa-arrow-up text-2xl mb-2 block"></i>
+            Select an exam to view results
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -449,11 +481,6 @@
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="/static/js/app.js"></script>
 <script>
-// ══════════════════════════════════════════════════════════
-//  Faculty Dashboard — SugExam
-//  Team Believer © 2026
-// ══════════════════════════════════════════════════════════
-
 const socket = io({ transports:['websocket','polling'] });
 let allExams      = [];
 let currentExamId = null;
@@ -517,11 +544,12 @@ function setupSocket() {
 
 // ── TABS ──────────────────────────────────────────────────
 const TAB_TITLES = {
-  exams:'All Exams',create:'Create Exam',
-  questions:'Manage Questions',live:'Live Feed'
+  exams:'All Exams', create:'Create Exam',
+  questions:'Manage Questions', live:'Live Feed',
+  results:'Results Overview'
 };
 function showTab(name) {
-  ['exams','create','questions','live'].forEach(t => {
+  ['exams','create','questions','live','results'].forEach(t => {
     document.getElementById(`tab-${t}`)?.classList.add('hidden');
     const n = document.getElementById(`nav-${t}`);
     if(n){ n.classList.remove('nav-active'); n.classList.add('text-gray-400'); }
@@ -532,6 +560,7 @@ function showTab(name) {
   document.getElementById('page-title').textContent = TAB_TITLES[name]||name;
   if(name==='exams')     loadExams();
   if(name==='questions') populateExamSelect();
+  if(name==='results')   loadResultsTab();
 }
 
 // ── EXAMS ─────────────────────────────────────────────────
@@ -865,32 +894,25 @@ function setFile(file){
   if(dz){ dz.style.borderColor='rgba(139,92,246,0.6)'; dz.style.background='rgba(139,92,246,0.05)'; }
 }
 
-// ★★★ AI parseAndImport ★★★
 async function parseAndImport(){
   if(!currentExamId){ toast('Select an exam first','warning'); return; }
   const file=window._selectedFile||document.getElementById('q-file').files[0];
   if(!file){ toast('Please select a file first','warning'); return; }
-
   const icon=document.getElementById('parse-icon');
   const text=document.getElementById('parse-text');
   icon.className='fas fa-spinner fa-spin';
   text.textContent='AI Processing…';
   showAILoader(true);
-
   const fd=new FormData();
   fd.append('file',file);
-
   try {
     const r=await fetch(`/api/exams/${currentExamId}/questions/upload`,
       {method:'POST',body:fd,credentials:'same-origin'});
     const d=await r.json();
-
     if(!r.ok){ toast(d.error||'Upload failed','error'); return; }
-
     if(!d.questions||!d.questions.length){
       toast('No questions found in file','warning'); return;
     }
-
     const newQs=d.questions.map(q=>({
       text:          q.text           ||'',
       type:          q.type           ||'subjective',
@@ -899,12 +921,8 @@ async function parseAndImport(){
       correct_option:q.correct_option ||'',
       model_answer:  q.model_answer   ||''
     }));
-
     const withAns  = newQs.filter(q=>q.model_answer&&q.model_answer.length>10).length;
     const mcqCount = newQs.filter(q=>q.type==='mcq').length;
-    const subCount = newQs.filter(q=>q.type==='subjective').length;
-
-    // Result box
     const pr=document.getElementById('parse-result');
     pr.style.cssText=d.ai
       ?'background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);color:#c4b5fd;'
@@ -938,29 +956,23 @@ async function parseAndImport(){
         </div>
       </div>`;
     pr.classList.remove('hidden');
-
     toast(
       d.ai
         ?`AI extracted ${newQs.length} questions with model answers!`
         :`Extracted ${newQs.length} questions`,
       'success'
     );
-
     questions=[...questions,...newQs];
     renderQuestionList();
-
     setTimeout(()=>{
       document.getElementById('q-editor-list')
         ?.scrollIntoView({behavior:'smooth',block:'start'});
     },500);
-
-    // Reset
     window._selectedFile=null;
     document.getElementById('q-file').value='';
     const dz=document.getElementById('drop-zone');
     if(dz){ dz.style.borderColor=''; dz.style.background=''; }
     document.getElementById('file-name').classList.add('hidden');
-
   } catch(e){
     toast('Error: '+e.message,'error');
     console.error('[parseAndImport]',e);
@@ -971,7 +983,6 @@ async function parseAndImport(){
   }
 }
 
-// ── AI Loader ─────────────────────────────────────────────
 function showAILoader(show){
   let el=document.getElementById('ai-loader');
   if(show){
@@ -1063,6 +1074,100 @@ async function saveAllQuestions(){
 function goManageQ(eid){
   showTab('questions');
   setTimeout(()=>{ document.getElementById('q-exam-select').value=eid; loadQuestionsForExam(); },100);
+}
+
+// ── RESULTS TAB ───────────────────────────────────────────
+function loadResultsTab() {
+  const sel = document.getElementById('results-exam-select');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">— Select Exam —</option>'
+    + allExams.map(e =>
+        `<option value="${e.exam_id}">${esc(e.title)} — ${e.exam_id}</option>`
+      ).join('');
+}
+
+async function loadFacultyResults(examId) {
+  if(!examId) return;
+  const wrap = document.getElementById('results-table-body');
+  wrap.innerHTML = `<div class="p-8 text-center text-gray-500">
+    <i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i>Loading…</div>`;
+  document.getElementById('results-stats').classList.add('hidden');
+
+  const {ok, data} = await apiGet(`/api/results/${examId}`);
+
+  if(!ok || !data || !data.length) {
+    wrap.innerHTML = `<div class="p-10 text-center text-gray-500">
+      <i class="fas fa-inbox text-3xl mb-2 block text-gray-600"></i>
+      <p class="font-medium">No results yet.</p>
+      <p class="text-xs mt-1">Publish results first.</p></div>`;
+    return;
+  }
+
+  // Stats
+  const total  = data.length;
+  const passed = data.filter(r=>r.pass).length;
+  const failed = total - passed;
+  const rate   = Math.round(passed/total*100);
+  document.getElementById('rs-total').textContent = total;
+  document.getElementById('rs-pass').textContent  = passed;
+  document.getElementById('rs-fail').textContent  = failed;
+  document.getElementById('rs-rate').textContent  = rate+'%';
+  document.getElementById('results-stats').classList.remove('hidden');
+
+  // Table
+  wrap.innerHTML = `
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-white/5 text-xs text-gray-500 uppercase tracking-wide">
+            <th class="px-4 py-3 text-left">Rank</th>
+            <th class="px-4 py-3 text-left">Student</th>
+            <th class="px-4 py-3 text-left">Roll No.</th>
+            <th class="px-4 py-3 text-center">Score</th>
+            <th class="px-4 py-3 text-center">Percentile</th>
+            <th class="px-4 py-3 text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(r=>`
+            <tr class="border-b border-white/5 hover:bg-white/2 transition-colors">
+              <td class="px-4 py-3 font-bold">
+                ${r.rank===1
+                  ? '🥇 <span class="text-yellow-400">#1</span>'
+                  : r.rank===2
+                  ? '🥈 <span class="text-gray-300">#2</span>'
+                  : r.rank===3
+                  ? '🥉 <span class="text-amber-600">#3</span>'
+                  : `<span class="text-gray-500">#${r.rank}</span>`}
+              </td>
+              <td class="px-4 py-3">
+                <p class="text-white font-semibold">${esc(r.name||'N/A')}</p>
+              </td>
+              <td class="px-4 py-3">
+                <span class="font-mono text-xs text-gray-400 bg-gray-800/60 px-2 py-0.5 rounded-lg">
+                  ${esc(r.roll_number||'—')}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <span class="font-bold text-white">${r.total}</span>
+                <span class="text-gray-500 text-xs">/${r.total_marks||'?'}</span>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <span class="text-purple-400 font-semibold">${r.percentile??'—'}%</span>
+              </td>
+              <td class="px-4 py-3 text-center">
+                ${r.pass
+                  ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold
+                       bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                       ✓ PASSED</span>`
+                  : `<span class="px-2.5 py-1 rounded-full text-xs font-bold
+                       bg-red-500/15 border border-red-500/30 text-red-400">
+                       ✗ FAILED</span>`}
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
 }
 
 // ── LIVE FEED ─────────────────────────────────────────────
