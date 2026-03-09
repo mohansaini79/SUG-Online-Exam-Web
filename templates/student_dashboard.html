@@ -477,7 +477,7 @@ async function loadResults() {
         <i class="fas fa-${r.pass ? 'check-circle text-emerald-400' : 'times-circle text-red-400'} text-xl"></i>
       </div>
       <div class="flex-1 min-w-0">
-        <p class="text-white font-semibold text-sm">${esc(r.exam_id)}</p>
+       <p class="text-white font-semibold text-sm">${esc(r.exam_title || r.exam_id)}</p>
         <p class="text-gray-500 text-xs mt-0.5">
           Score: <strong class="text-white">${r.total}</strong> ·
           Rank: <strong class="text-yellow-400">#${r.rank}</strong> ·
